@@ -1,26 +1,26 @@
 // demo client
 
-#include <string>
 #include "demo_protocol.h"
 #include "rpc.h"
-#include <vector>
 #include <arpa/inet.h>
-#include <sstream>
 #include <iostream>
+#include <sstream>
 #include <stdio.h>
+#include <string>
+#include <vector>
 
 // Client interface to the demo server
 class demo_client {
- protected:
+protected:
   rpcc *cl;
- public:
+
+public:
   demo_client(std::string d);
-  virtual ~demo_client() {};
+  virtual ~demo_client(){};
   virtual demo_protocol::status stat(demo_protocol::demoVar);
 };
 
-demo_client::demo_client(std::string dst)
-{
+demo_client::demo_client(std::string dst) {
   sockaddr_in dstsock;
   make_sockaddr(dst.c_str(), &dstsock);
   cl = new rpcc(dstsock);
@@ -29,24 +29,20 @@ demo_client::demo_client(std::string dst)
   }
 }
 
-int
-demo_client::stat(demo_protocol::demoVar var)
-{
+int demo_client::stat(demo_protocol::demoVar var) {
   int r;
   demo_protocol::status ret = cl->call(demo_protocol::stat, cl->id(), var, r);
-  VERIFY (ret == demo_protocol::OK);
+  VERIFY(ret == demo_protocol::OK);
   return r;
 }
 
 std::string dst;
 demo_client *dc;
 
-int
-main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   int r;
 
-  if(argc != 2){
+  if (argc != 2) {
     fprintf(stderr, "Usage: %s [host:]port\n", argv[0]);
     exit(1);
   }
@@ -54,5 +50,5 @@ main(int argc, char *argv[])
   dst = argv[1];
   dc = new demo_client(dst);
   r = dc->stat(1);
-  printf ("stat returned %d\n", r);
+  printf("stat returned %d\n", r);
 }
