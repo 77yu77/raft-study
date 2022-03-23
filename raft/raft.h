@@ -86,7 +86,7 @@ private:
   raft_role role; //服务器身份
   int votedFor;
   int current_term; //服务器看到的最新term
-  int commit_index; //已知最高的日志条目的索引
+  int commit_index; //已知被提交的最高的日志条目的索引
   int last_applied; //应用于状态机的最高日志条目的索引
   int votenum;
   int64_t last_received_RPC_time;
